@@ -43,6 +43,7 @@
     <Reference Include="System.Xml.Serialization" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\Citation.cs" />
     <Compile Include="Data\Infobox.cs" />
     <Compile Include="Data\KnowlegeData.cs" />
     <Compile Include="Data\Page.cs" />
