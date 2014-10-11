@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Data\Infobox.cs" />
+    <Compile Include="Data\KnowlegeData.cs" />
     <Compile Include="Data\Page.cs" />
     <Compile Include="Data\WikiTypes.cs" />
     <Compile Include="Program.cs" />
