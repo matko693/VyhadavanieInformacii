@@ -1,6 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Data.Linq;
+using System.IO;
 using System.Xml;
+using System.Xml.Linq;
 using NamedEntityExtractorSK.Data;
+using NamedEntityExtractorSK.Utilities;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace NamedEntityExtractorSK.Readers
 {
@@ -29,8 +37,23 @@ namespace NamedEntityExtractorSK.Readers
 					{
 						var outerXml = reader.ReadOuterXml();
 
-						if (outerXml.Contains("{{Infobox") || outerXml.Contains("{{Citácia"))
-							Pages.Add(new Page(outerXml));
+						Parallel.Invoke(() =>
+							{
+								var infoboxes = outerXml.Split(WordUtils.Infobox, System.StringSplitOptions.RemoveEmptyEntries).Skip(1);
+								var geoboxes = outerXml.Split(WordUtils.Geobox, System.StringSplitOptions.RemoveEmptyEntries).Skip(1);
+								var citations = outerXml.Split(WordUtils.Citacia, System.StringSplitOptions.RemoveEmptyEntries).Skip(1);
+
+								if (infoboxes.Any() || geoboxes.Any() || citations.Any())
+								{
+									var data = new List<KnowlegeData>();
+
+									WordUtils.TrimBoxes<Infobox>(infoboxes, ref data);
+									WordUtils.TrimBoxes<Geobox>(geoboxes, ref data);
+									WordUtils.TrimBoxes<Citation>(citations, ref data);
+
+									if (data.Any()) Pages.Add(new Page(data));
+								}
+							});
 					}
 				}
 			}

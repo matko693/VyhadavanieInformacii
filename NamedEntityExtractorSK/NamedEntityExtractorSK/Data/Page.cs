@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace NamedEntityExtractorSK.Data
 {
@@ -6,54 +7,21 @@ namespace NamedEntityExtractorSK.Data
 	{
 		#region Properties
 
-		public List<Infobox> Infoboxes { get; set; }
+		public List<KnowlegeData> Infoboxes { get; set; }
 
 		#endregion
 
 		#region Constructors
 
-		public Page(string content)
+		public Page(List<KnowlegeData> data)
 		{
-			var startIndex = content.IndexOf("<text");
-			var endIndex = content.IndexOf("</text");
-
-			if (startIndex != -1 && endIndex != -1)
-			{
-				content = content.Substring(startIndex, endIndex - startIndex + 1);
-				Infoboxes = new List<Infobox>();
-				SetInfoboxes(content);
-			}
+			Infoboxes = data;
 		}
 
 		#endregion
 
 		#region Methods
 
-		private void SetInfoboxes(string text)
-		{
-			var indexes = AllIndexesOf(text, @"{{Infobox ");
-			indexes.AddRange(AllIndexesOf(text, @"{{Citácia "));
-			
-			indexes.ForEach(x => GetInfobox(text, x));
-		}
-
-		private void GetInfobox(string text, int startIndex)
-		{
-			var endIndex = text.Substring(startIndex).IndexOf("}}");
-			Infoboxes.Add(new Infobox() { Content = text.Substring(startIndex, endIndex +2) });
-		}
-
-		private List<int> AllIndexesOf(string str, string value)
-		{
-			List<int> indexes = new List<int>();
-			for (int index = 0; ; index += value.Length)
-			{
-				index = str.IndexOf(value, index);
-				if (index == -1)
-					return indexes;
-				indexes.Add(index);
-			}
-		}
 
 		#endregion
 	}
