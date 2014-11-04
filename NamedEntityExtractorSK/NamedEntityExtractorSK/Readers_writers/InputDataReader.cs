@@ -10,7 +10,7 @@ using NamedEntityExtractorSK.Utilities;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace NamedEntityExtractorSK.Readers
+namespace NamedEntityExtractorSK.Readers_writers
 {
 	public class InputDataReader
 	{

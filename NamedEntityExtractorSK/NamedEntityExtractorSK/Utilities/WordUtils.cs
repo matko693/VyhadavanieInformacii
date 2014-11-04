@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using NamedEntityExtractorSK.Data;
 
@@ -16,6 +17,9 @@ namespace NamedEntityExtractorSK.Utilities
 		public static string[] SearchBoxes = { "{{Citácia", "{{Infobox", "{{Geobox" };
 
 		private static char[] WhiteSpaces = new char[] { ' ', '\n', '\t' };
+
+		private static char[] NonLetterCharacters = new char[] { ' ', '|', '{', '}', '[', ']', '"', ',', '+', '-', '–', '*' };
+		private static string[] HtmlCharacters = new string[] { "&lt;", "&gt;", "&amp;", "/ref", "&quot;", "/sub", "***", "!--" };
 
 		public static string TrimWhiteSpaces(this string text)
 		{
@@ -38,6 +42,20 @@ namespace NamedEntityExtractorSK.Utilities
 					data.Add(instance);
 				}
 			}
+		}
+
+		public static string TrimNonLetterCharacters(string word, bool deleteNumbers = false)
+		{
+			word = Regex.Replace(word, @"&[a-z]*;", "");
+			word = Regex.Replace(word, @"/ref", "");
+			word = Regex.Replace(word, @"/sub", "");
+			word = Regex.Replace(word, @"\*\*\*", "");
+			word = Regex.Replace(word, @"!--", "");
+			word = Regex.Replace(word, @"[()]", "");
+			word = Regex.Replace(word, @"['\\,\?]", "");
+			word = Regex.Replace(word, @"\n", "");
+			word = deleteNumbers ? Regex.Replace(word, @"[\d.,]", "") : word.TrimStart(' ').TrimEnd(' ');
+			return word.TrimStart(NonLetterCharacters).TrimEnd(NonLetterCharacters);
 		}
 	}
 }

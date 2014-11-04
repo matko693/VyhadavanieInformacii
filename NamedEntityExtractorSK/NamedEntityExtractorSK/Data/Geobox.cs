@@ -6,10 +6,21 @@ namespace NamedEntityExtractorSK.Data
 	public class Geobox : KnowlegeData
 	{
 		#region Properties
+		#endregion
 
-		//locations
-		//mayor → person
-		public string[] Patterns = new string[] { "[Mm]eno[0-9]*", "[nN]ame", "[oO]ther_name", "[Cc]ountry", "[rR]egi[oó]n", "[mM]ayor"};
+		#region Methods
+
+		public override void SetRegexAttributes()
+		{
+			//locations
+			//mayor → person
+			this.Attributes = new RegexKeyType[] {	new RegexKeyType("[Mm]eno[0-9]*", NamedEntityType.Location),
+													new RegexKeyType("[nN]ame", NamedEntityType.Location),
+													new RegexKeyType("[oO]ther_name", NamedEntityType.Location),
+													new RegexKeyType("[Cc]ountry", NamedEntityType.Location),
+													new RegexKeyType("[rR]egi[oó]n", NamedEntityType.Location),
+													new RegexKeyType("[mM]ayor", NamedEntityType.Person)};
+		}
 
 		#endregion
 	}
